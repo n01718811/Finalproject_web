@@ -1,0 +1,103 @@
+//- Edit movie form view
+//- Author: Tien Dung Pham (n01718811)
+
+extends layout
+
+block content
+  .form-container
+    h1 Edit Movie
+    p Update movie information
+
+    if errors
+      each error in errors
+        .alert.alert-danger= error.msg
+
+    form(method="POST", action=`/movies/edit/${movie._id}`)
+      .form-group
+        label(for="name") Movie Title:
+        input.form-control(
+          type="text", 
+          name="name", 
+          id="name",
+          value=formData ? formData.name : movie.name,
+          required,
+          placeholder="Enter movie title"
+        )
+      
+      .form-group
+        label(for="description") Description:
+        textarea.form-control(
+          name="description", 
+          id="description",
+          rows="4",
+          minlength="10",
+          required,
+          placeholder="Enter movie description (minimum 10 characters)"
+        )= formData ? formData.description : movie.description
+        small.form-text Minimum 10 characters
+      
+      .form-group
+        label(for="year") Release Year:
+        input.form-control(
+          type="number", 
+          name="year", 
+          id="year",
+          min="1900",
+          max=new Date().getFullYear(),
+          value=formData ? formData.year : movie.year,
+          required
+        )
+      
+      .form-group
+        label(for="coverImage") Cover Image URL:
+        input.form-control(
+          type="url", 
+          name="coverImage", 
+          id="coverImage",
+          value=formData ? formData.coverImage : movie.coverImage,
+          placeholder="Enter image URL"
+        )
+        small.form-text Enter a URL for the movie cover image
+      
+      .form-group
+        label Genres:
+        .genres-checkbox
+          each genre in availableGenres
+            .checkbox-item
+              - let isChecked = false;
+              - if (formData && formData.genres) {
+              -   isChecked = formData.genres.includes(genre);
+              - } else {
+              -   isChecked = movie.genres.includes(genre);
+              - }
+              input(
+                type="checkbox", 
+                name="genres", 
+                id=`genre-${genre}`,
+                value=genre,
+                checked=isChecked
+              )
+              label(for=`genre-${genre}`)= genre
+        small.form-text Select at least one genre
+      
+      .form-group
+        label(for="rating") Rating (1-10):
+        input.form-control(
+          type="number", 
+          name="rating", 
+          id="rating",
+          min="1",
+          max="10",
+          step="0.1",
+          value=formData ? formData.rating : movie.rating,
+          required
+        )
+        small.form-text Rate from 1 (poor) to 10 (excellent)
+      
+      .form-actions
+        button.btn.btn-primary(type="submit") 
+          span ✏️ 
+          | Update Movie
+        a.btn.btn-secondary(href="/movies") 
+          span ↩️ 
+          | Cancel

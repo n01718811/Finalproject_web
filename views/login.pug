@@ -1,0 +1,43 @@
+//- User login view
+//- Author: Tien Dung Pham (n01718811)
+
+extends layout
+
+block content
+  .form-container
+    h1 Login
+    p Sign in to your account
+
+    if errors
+      each error in errors
+        .alert.alert-danger= error.msg
+
+    form(method="POST", action="/users/login")
+      .form-group
+        label(for="email") Email:
+        input.form-control(
+          type="email", 
+          name="email", 
+          id="email",
+          value=formData ? formData.email : '',
+          required,
+          placeholder="Enter your email"
+        )
+      
+      .form-group
+        label(for="password") Password:
+        input.form-control(
+          type="password", 
+          name="password", 
+          id="password",
+          required,
+          placeholder="Enter your password"
+        )
+      
+      button.btn.btn-primary.btn-block(type="submit") 
+        span 🔑 
+        | Login
+    
+    .auth-link
+      p Don't have an account? 
+        a(href="/users/register") Register here

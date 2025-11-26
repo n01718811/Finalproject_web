@@ -1,0 +1,66 @@
+//- User registration view
+//- Author: Kaushalya Satharasinghe (n01718508)
+
+extends layout
+
+block content
+  .form-container
+    h1 Register
+    p Create your account to start managing movies
+
+    if errors
+      each error in errors
+        .alert.alert-danger= error.msg
+
+    form(method="POST", action="/users/register")
+      .form-group
+        label(for="name") Full Name:
+        input.form-control(
+          type="text", 
+          name="name", 
+          id="name",
+          value=formData ? formData.name : '',
+          required,
+          placeholder="Enter your full name"
+        )
+      
+      .form-group
+        label(for="email") Email:
+        input.form-control(
+          type="email", 
+          name="email", 
+          id="email",
+          value=formData ? formData.email : '',
+          required,
+          placeholder="Enter your email address"
+        )
+      
+      .form-group
+        label(for="password") Password:
+        input.form-control(
+          type="password", 
+          name="password", 
+          id="password",
+          minlength="6",
+          required,
+          placeholder="Enter your password (min 6 characters)"
+        )
+        small.form-text Password must be at least 6 characters long
+      
+      .form-group
+        label(for="confirm_password") Confirm Password:
+        input.form-control(
+          type="password", 
+          name="confirm_password", 
+          id="confirm_password",
+          required,
+          placeholder="Confirm your password"
+        )
+      
+      button.btn.btn-primary.btn-block(type="submit") 
+        span 📝 
+        | Register
+    
+    .auth-link
+      p Already have an account? 
+        a(href="/users/login") Login here

@@ -1,0 +1,19 @@
+//- Error page view
+//- Author: Kaushalya Satharasinghe (n01718508)
+
+extends layout
+
+block content
+  .error-container
+    h1= message
+    h2= error.status
+    if error.stack
+      pre.error-details= error.stack
+    
+    .error-actions
+      a.btn.btn-primary(href="/") 
+        span 🏠 
+        | Go Home
+      a.btn.btn-secondary(href="javascript:history.back()") 
+        span ↩️ 
+        | Go Back

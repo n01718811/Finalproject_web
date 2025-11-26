@@ -1,0 +1,52 @@
+//- Home page view
+//- Author: Kaushalya Satharasinghe (n01718508)
+
+extends layout
+
+block content
+  .hero
+    h1 🎬 Welcome to Movie Management App
+    p.lead Manage your personal movie collection with ease
+    
+    if user
+      .authenticated-user
+        h2 Welcome back, #{user.name}!
+        .auth-buttons
+          a.btn.btn-primary(href="/movies") 
+            span 📽️ 
+            | View Your Movies
+          a.btn.btn-secondary(href="/movies/add") 
+            span ➕ 
+            | Add New Movie
+    else
+      .guest-user
+        p Please register or login to start managing your movie collection
+        .auth-buttons
+          a.btn.btn-primary(href="/users/register") 
+            span 📝 
+            | Register
+          a.btn.btn-secondary(href="/users/login") 
+            span 🔑 
+            | Login
+
+  .features
+    .feature
+      .feature-icon 🎬
+      h3 Add Movies
+      p Easily add movies to your personal collection with details like title, description, year, genres, and rating.
+    
+    .feature
+      .feature-icon ✏️
+      h3 Edit & Update
+      p Update movie information anytime to keep your collection current and accurate.
+    
+    .feature
+      .feature-icon 🗑️
+      h3 Delete Movies
+      p Remove movies from your collection when needed with simple delete functionality.
+    
+    .feature
+      .feature-icon 🔐
+      h3 Secure & Private
+      p Your movie collection is private and secure with user authentication and authorization.
+      

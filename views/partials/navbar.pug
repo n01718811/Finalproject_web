@@ -1,0 +1,19 @@
+//- Navigation bar partial
+//- Author: Tien Dung Pham (n01718811)
+
+nav.navbar
+  .container
+    a.navbar-brand(href="/") 🎬 Movie Manager
+    
+    .navbar-nav
+      if user
+        //- Authenticated user menu
+        span.nav-item Welcome, #{user.name}
+        a.nav-link(href="/movies") 📽️ My Movies
+        a.nav-link(href="/movies/filter") 🔍 Filter Movies
+        a.nav-link(href="/movies/add") ➕ Add Movie
+        a.nav-link(href="/users/logout") 🚪 Logout
+      else
+        //- Guest menu
+        a.nav-link(href="/users/register") 📝 Register
+        a.nav-link(href="/users/login") 🔑 Login

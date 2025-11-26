@@ -1,0 +1,34 @@
+//- Main layout template
+//- Author: Kaushalya Satharasinghe (n01718508)
+
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    title= title + ' | Movie Management App'
+    link(rel="stylesheet", href="/stylesheets/style.css")
+  body
+    //- Navigation partial
+    include partials/navbar
+
+    main.main-content
+      .container
+        //- Flash messages
+        if success_msg && success_msg.length > 0
+          .alert.alert-success= success_msg
+        if error_msg && error_msg.length > 0
+          .alert.alert-danger= error_msg
+        if error && error.length > 0
+          .alert.alert-danger= error
+
+        //- Main content block
+        block content
+
+    //- Footer
+    footer.footer
+      .container
+        p &copy; 2025 Movie Management App. Created by Tien Dung Pham (n01718811) & Kaushalya Satharasinghe (n01718508).
+
+    //- Client-side JavaScript
+    script(src="/javascripts/main.js")

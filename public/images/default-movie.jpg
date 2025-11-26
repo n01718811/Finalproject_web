@@ -1,0 +1,6 @@
+<svg width="400" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="200" fill="#2c3e50"/>
+  <text x="200" y="100" text-anchor="middle" fill="#ecf0f1" font-family="Arial" font-size="24" dy=".3em">🎬 Movie Poster</text>
+  <text x="200" y="130" text-anchor="middle" fill="#bdc3c7" font-family="Arial" font-size="14" dy=".3em">No Image Available</text>
+</svg>
+

@@ -1,0 +1,97 @@
+//- Add movie form view
+//- Author: Kaushalya Satharasinghe (n01718508)
+
+extends layout
+
+block content
+  .form-container
+    h1 Add New Movie
+    p Add a new movie to your collection
+
+    if errors
+      each error in errors
+        .alert.alert-danger= error.msg
+
+    form(method="POST", action="/movies/add")
+      .form-group
+        label(for="name") Movie Title:
+        input.form-control(
+          type="text", 
+          name="name", 
+          id="name",
+          value=formData ? formData.name : '',
+          required,
+          placeholder="Enter movie title"
+        )
+      
+      .form-group
+        label(for="description") Description:
+        textarea.form-control(
+          name="description", 
+          id="description",
+          rows="4",
+          minlength="10",
+          required,
+          placeholder="Enter movie description (minimum 10 characters)"
+        )= formData ? formData.description : ''
+        small.form-text Minimum 10 characters
+      
+      .form-group
+        label(for="year") Release Year:
+        input.form-control(
+          type="number", 
+          name="year", 
+          id="year",
+          min="1900",
+          max=new Date().getFullYear(),
+          value=formData ? formData.year : new Date().getFullYear(),
+          required
+        )
+      
+      .form-group
+        label(for="coverImage") Cover Image URL:
+        input.form-control(
+          type="url", 
+          name="coverImage", 
+          id="coverImage",
+          value=formData ? formData.coverImage : '',
+          placeholder="Enter image URL",
+          autocomplete="off"
+        )
+ 
+      .form-group
+        label Genres:
+        .genres-checkbox
+          each genre in availableGenres
+            .checkbox-item
+              input(
+                type="checkbox", 
+                name="genres", 
+                id=`genre-${genre}`,
+                value=genre,
+                checked=(formData && formData.genres && formData.genres.includes(genre))
+              )
+              label(for=`genre-${genre}`)= genre
+        small.form-text Select at least one genre
+      
+      .form-group
+        label(for="rating") Rating (1-10):
+        input.form-control(
+          type="number", 
+          name="rating", 
+          id="rating",
+          min="1",
+          max="10",
+          step="0.1",
+          value=formData ? formData.rating : '7',
+          required
+        )
+        small.form-text Rate from 1 (poor) to 10 (excellent)
+      
+      .form-actions
+        button.btn.btn-primary(type="submit") 
+          span ➕ 
+          | Add Movie
+        a.btn.btn-secondary(href="/movies") 
+          span ↩️ 
+          | Cancel

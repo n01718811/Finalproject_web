@@ -1,0 +1,65 @@
+//- Movies list view
+//- Author: Tien Dung Pham (n01718811)
+
+extends layout
+
+block content
+  .movies-header
+    h1 My Movie Collection
+    a.btn.btn-primary(href="/movies/add") 
+      span ➕ 
+      | Add New Movie
+
+  if movies && movies.length > 0
+    .movies-grid
+      each movie in movies
+        .movie-card
+          .movie-cover
+            img.movie-image(
+              src=movie.coverImage, 
+              alt=movie.name,
+              onerror="this.src='/images/default-movie.jpg'"
+            )
+          .movie-content
+            .movie-header
+              h3.movie-title= movie.name
+              .movie-year (#{movie.year})
+            .movie-rating
+              - let stars = '';
+              - for (let i = 1; i <= 10; i++) {
+                - if (i <= movie.rating) {
+                  span.star.filled ⭐
+                - } else {
+                  span.star ☆
+                - }
+              - }
+              span.rating-value (#{movie.rating}/10)
+            .movie-description= movie.description
+            .movie-genres
+              each genre in movie.genres
+                span.genre-badge= genre
+            .movie-actions
+              a.btn.btn-sm.btn-outline(href=`/movies/${movie._id}`)
+                span 👁️
+                | View
+              a.btn.btn-sm.btn-outline(href=`/movies/edit/${movie._id}`) 
+                span ✏️ 
+                | Edit
+              form.delete-form(
+                action=`/movies/delete/${movie._id}`,
+                method="POST",
+                onsubmit=`return confirmDelete("${movie.name}")`
+              )
+                button.btn.btn-sm.btn-danger(type="submit") 
+                  span 🗑️ 
+                  | Delete
+
+            .movie-footer
+              small Added on #{movie.createdAt.toLocaleDateString()}
+  else
+    .empty-state
+      h2 No movies yet
+      p You haven't added any movies to your collection.
+      a.btn.btn-primary(href="/movies/add") 
+        span ➕ 
+        | Add Your First Movie

@@ -1,0 +1,57 @@
+//- Movie details view
+//- Author: (you can put your name / id)
+
+extends layout
+
+block content
+  .movie-details
+    .movie-details-header
+      h1= movie.name
+      .movie-year (#{movie.year})
+
+    .movie-details-body
+      .movie-details-left
+        img.movie-image.detail-image(
+            src=movie.coverImage,
+            alt=movie.name,
+            onerror="this.src='/images/default-movie.jpg'",
+            style="max-width: 300px; width: 100%; height: auto; object-fit: cover;"
+        )
+
+
+      .movie-details-right
+        h3 Description
+        p= movie.description
+
+        h3 Genres
+        if movie.genres && movie.genres.length
+          ul.genres-list
+            each genre in movie.genres
+              li.genre-badge= genre
+        else
+          p No genres specified.
+
+        h3 Rating
+        p
+          | #{movie.rating} / 10
+
+        h3 Added On
+        p #{movie.createdAt.toLocaleDateString()}
+
+    .movie-details-actions
+      a.btn.btn-primary(href=`/movies/edit/${movie._id}`)
+        span ✏️
+        | Edit Movie
+
+      form.delete-form(
+        action=`/movies/delete/${movie._id}`,
+        method="POST",
+        onsubmit=`return confirm('Are you sure you want to delete "${movie.name}"?')`
+      )
+        button.btn.btn-danger(type="submit")
+          span 🗑️
+          | Delete Movie
+
+      a.btn.btn-secondary(href="/movies")
+        span ↩️
+        | Back to My Movies
