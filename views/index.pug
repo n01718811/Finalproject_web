@@ -1,13 +1,17 @@
 //- Home page view
+//- Landing page with welcome message and feature highlights
+//- Displays different content for authenticated vs guest users
 //- Author: Kaushalya Satharasinghe (n01718508)
 
 extends layout
 
 block content
+  //- Hero section with welcome message and call-to-action
   .hero
     h1 🎬 Welcome to Movie Management App
     p.lead Manage your personal movie collection with ease
     
+    //- Authenticated user section
     if user
       .authenticated-user
         h2 Welcome back, #{user.name}!
@@ -19,6 +23,7 @@ block content
             span ➕ 
             | Add New Movie
     else
+      //- Guest user section with login/register prompts
       .guest-user
         p Please register or login to start managing your movie collection
         .auth-buttons
@@ -29,22 +34,27 @@ block content
             span 🔑 
             | Login
 
+  //- Features section highlighting app capabilities
   .features
+    //- Feature 1: Add Movies
     .feature
       .feature-icon 🎬
       h3 Add Movies
       p Easily add movies to your personal collection with details like title, description, year, genres, and rating.
     
+    //- Feature 2: Edit & Update
     .feature
       .feature-icon ✏️
       h3 Edit & Update
       p Update movie information anytime to keep your collection current and accurate.
     
+    //- Feature 3: Delete Movies
     .feature
       .feature-icon 🗑️
       h3 Delete Movies
       p Remove movies from your collection when needed with simple delete functionality.
     
+    //- Feature 4: Secure & Private
     .feature
       .feature-icon 🔐
       h3 Secure & Private

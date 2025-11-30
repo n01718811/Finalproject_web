@@ -1,57 +1,109 @@
 //- Movie details view
-//- Author: (you can put your name / id)
+//- Displays comprehensive information about a single movie
+//- Includes movie metadata, ratings, genres, and action buttons
+//- Author: Kaushalya Satharasinghe (n01718508)
 
 extends layout
 
 block content
-  .movie-details
-    .movie-details-header
-      h1= movie.name
-      .movie-year (#{movie.year})
+  .container
+    //- Flash messages for success/error notifications
+    if success_msg && success_msg.length > 0
+      .alert.alert-success= success_msg
+    if error_msg && error_msg.length > 0
+      .alert.alert-danger= error_msg
 
-    .movie-details-body
-      .movie-details-left
-        img.movie-image.detail-image(
+    //- Page Header with title and subtitle
+    .page-header
+      h1.page-title 🎬 Movie Details
+      p.page-subtitle View complete information about this movie
+
+    //- Main movie details container
+    .movie-details
+      //- Header section with movie title and release year
+      .movie-details-header
+        h1= movie.name
+        .movie-year #{movie.year}
+
+      //- Two-column layout for movie information
+      .movie-details-body
+        //- Left column: Movie cover image
+        .movie-details-left
+          img.movie-image.detail-image(
             src=movie.coverImage,
             alt=movie.name,
-            onerror="this.src='/images/default-movie.jpg'",
-            style="max-width: 300px; width: 100%; height: auto; object-fit: cover;"
-        )
+            onerror="this.src='/images/default-movie.jpg'"
+          )
 
+        //- Right column: Movie information sections
+        .movie-details-right
+          //- Description section
+          div
+            h3 📝 Description
+            p= movie.description
 
-      .movie-details-right
-        h3 Description
-        p= movie.description
+          //- Rating section with star visualization
+          div
+            h3 ⭐ Rating
+            p
+              strong #{movie.rating}
+              |  / 10
+              |  
+              //- Calculate star display (full stars, half star, empty stars)
+              - const fullStars = Math.floor(movie.rating)
+              - const halfStar = movie.rating % 1 >= 0.5
+              - const emptyStars = 10 - fullStars - (halfStar ? 1 : 0)
+              
+              //- Display full stars
+              each star in Array(fullStars)
+                span.star.filled ★
+              //- Display half star if applicable
+              if halfStar
+                span.star.filled ⭐
+              //- Display empty stars
+              each star in Array(emptyStars)
+                span.star ☆
 
-        h3 Genres
-        if movie.genres && movie.genres.length
-          ul.genres-list
-            each genre in movie.genres
-              li.genre-badge= genre
-        else
-          p No genres specified.
+          //- Genres section with badge display
+          div
+            h3 🎭 Genres
+            if movie.genres && movie.genres.length > 0
+              ul.genres-list
+                each genre in movie.genres
+                  li.genre-badge= genre
+            else
+              p No genres specified.
 
-        h3 Rating
-        p
-          | #{movie.rating} / 10
+          //- Creation date section
+          div
+            h3 📅 Added On
+            p= movie.createdAt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
 
-        h3 Added On
-        p #{movie.createdAt.toLocaleDateString()}
+          //- Owner information (if populated from database)
+          if movie.userId && movie.userId.name
+            div
+              h3 👤 Added By
+              p= movie.userId.name
 
-    .movie-details-actions
-      a.btn.btn-primary(href=`/movies/edit/${movie._id}`)
-        span ✏️
-        | Edit Movie
+      //- Action buttons section (Edit, Delete, Back)
+      .movie-details-actions
+        //- Show edit and delete buttons only if user owns the movie
+        if isOwner
+          a.btn.btn-primary(href=`/movies/edit/${movie._id}`)
+            span ✏️
+            |  Edit Movie
 
-      form.delete-form(
-        action=`/movies/delete/${movie._id}`,
-        method="POST",
-        onsubmit=`return confirm('Are you sure you want to delete "${movie.name}"?')`
-      )
-        button.btn.btn-danger(type="submit")
-          span 🗑️
-          | Delete Movie
+          //- Delete form with confirmation dialog
+          form.delete-form(
+            action=`/movies/delete/${movie._id}`,
+            method="POST",
+            onsubmit=`return confirm('Are you sure you want to delete "${movie.name}"?')`
+          )
+            button.btn.btn-danger(type="submit")
+              span 🗑️
+              |  Delete Movie
 
-      a.btn.btn-secondary(href="/movies")
-        span ↩️
-        | Back to My Movies
+        //- Back button (always visible)
+        a.btn.btn-secondary(href="/movies")
+          span ← 
+          |  Back to Movies

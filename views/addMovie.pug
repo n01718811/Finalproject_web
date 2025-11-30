@@ -1,4 +1,5 @@
 //- Add movie form view
+//- Form for creating a new movie entry with validation
 //- Author: Kaushalya Satharasinghe (n01718508)
 
 extends layout
@@ -8,11 +9,14 @@ block content
     h1 Add New Movie
     p Add a new movie to your collection
 
+    //- Display validation errors if any
     if errors
       each error in errors
         .alert.alert-danger= error.msg
 
+    //- Movie creation form
     form(method="POST", action="/movies/add")
+      //- Movie title input
       .form-group
         label(for="name") Movie Title:
         input.form-control(
@@ -24,6 +28,7 @@ block content
           placeholder="Enter movie title"
         )
       
+      //- Description textarea (minimum 10 characters)
       .form-group
         label(for="description") Description:
         textarea.form-control(
@@ -36,18 +41,21 @@ block content
         )= formData ? formData.description : ''
         small.form-text Minimum 10 characters
       
+      //- Release year input (1900-2025)
       .form-group
         label(for="year") Release Year:
         input.form-control(
-          type="number", 
+          type="text", 
           name="year", 
           id="year",
-          min="1900",
-          max=new Date().getFullYear(),
-          value=formData ? formData.year : new Date().getFullYear(),
-          required
+          pattern="[0-9]{4}",
+          value=formData ? formData.year : '',
+          required,
+          placeholder="e.g. 2024"
         )
+        small.form-text Enter a 4-digit year between 1900 and 2025
       
+      //- Cover image URL input (optional)
       .form-group
         label(for="coverImage") Cover Image URL:
         input.form-control(
@@ -59,6 +67,7 @@ block content
           autocomplete="off"
         )
  
+      //- Genre checkboxes (at least one required)
       .form-group
         label Genres:
         .genres-checkbox
@@ -74,6 +83,7 @@ block content
               label(for=`genre-${genre}`)= genre
         small.form-text Select at least one genre
       
+      //- Rating input (1-10 scale with 0.1 increments)
       .form-group
         label(for="rating") Rating (1-10):
         input.form-control(
@@ -88,6 +98,7 @@ block content
         )
         small.form-text Rate from 1 (poor) to 10 (excellent)
       
+      //- Form action buttons
       .form-actions
         button.btn.btn-primary(type="submit") 
           span ➕ 

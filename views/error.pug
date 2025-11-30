@@ -1,19 +1,26 @@
 //- Error page view
+//- Displays error message and stack trace (in development mode)
 //- Author: Kaushalya Satharasinghe (n01718508)
 
 extends layout
 
 block content
   .error-container
+    //- Error message
     h1= message
+    //- HTTP status code
     h2= error.status
+    //- Stack trace (only shown in development environment)
     if error.stack
       pre.error-details= error.stack
     
+    //- Action buttons for navigation
     .error-actions
+      //- Return to home page
       a.btn.btn-primary(href="/") 
         span 🏠 
         | Go Home
+      //- Go back to previous page
       a.btn.btn-secondary(href="javascript:history.back()") 
         span ↩️ 
         | Go Back

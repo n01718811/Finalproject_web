@@ -1,19 +1,29 @@
 //- Navigation bar partial
+//- Displays different menu items based on authentication status
 //- Author: Tien Dung Pham (n01718811)
 
 nav.navbar
   .container
+    //- Brand/logo link to home page
     a.navbar-brand(href="/") 🎬 Movie Manager
     
+    //- Navigation menu
     .navbar-nav
+      //- Authenticated user menu (shows when logged in)
       if user
-        //- Authenticated user menu
+        //- Welcome message with user's name
         span.nav-item Welcome, #{user.name}
+        //- My Movies link
         a.nav-link(href="/movies") 📽️ My Movies
+        //- Filter Movies link
         a.nav-link(href="/movies/filter") 🔍 Filter Movies
+        //- Add Movie link
         a.nav-link(href="/movies/add") ➕ Add Movie
+        //- Logout link
         a.nav-link(href="/users/logout") 🚪 Logout
       else
-        //- Guest menu
+        //- Guest menu (shows when not logged in)
+        //- Register link
         a.nav-link(href="/users/register") 📝 Register
+        //- Login link
         a.nav-link(href="/users/login") 🔑 Login

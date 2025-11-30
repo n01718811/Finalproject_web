@@ -27,7 +27,7 @@ const movieSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Release year is required'],
     min: [1900, 'Year must be 1900 or later'],
-    max: [new Date().getFullYear(), 'Year cannot be in the future']
+    max: [2025, 'Year cannot be greater than 2025']
   },
   genres: {
     type: [String],

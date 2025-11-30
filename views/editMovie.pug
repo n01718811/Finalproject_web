@@ -1,4 +1,6 @@
 //- Edit movie form view
+//- Form for updating an existing movie's information
+//- Pre-fills form with current movie data
 //- Author: Tien Dung Pham (n01718811)
 
 extends layout
@@ -8,11 +10,14 @@ block content
     h1 Edit Movie
     p Update movie information
 
+    //- Display validation errors if any
     if errors
       each error in errors
         .alert.alert-danger= error.msg
 
+    //- Movie update form
     form(method="POST", action=`/movies/edit/${movie._id}`)
+      //- Movie title input (pre-filled)
       .form-group
         label(for="name") Movie Title:
         input.form-control(
@@ -24,6 +29,7 @@ block content
           placeholder="Enter movie title"
         )
       
+      //- Description textarea (pre-filled, minimum 10 characters)
       .form-group
         label(for="description") Description:
         textarea.form-control(
@@ -36,18 +42,21 @@ block content
         )= formData ? formData.description : movie.description
         small.form-text Minimum 10 characters
       
+      //- Release year input (pre-filled, 1900-2025)
       .form-group
         label(for="year") Release Year:
         input.form-control(
-          type="number", 
+          type="text", 
           name="year", 
           id="year",
-          min="1900",
-          max=new Date().getFullYear(),
+          pattern="[0-9]{4}",
           value=formData ? formData.year : movie.year,
-          required
+          required,
+          placeholder="e.g. 2024"
         )
+        small.form-text Enter a 4-digit year between 1900 and 2025
       
+      //- Cover image URL input (pre-filled, optional)
       .form-group
         label(for="coverImage") Cover Image URL:
         input.form-control(
@@ -59,11 +68,13 @@ block content
         )
         small.form-text Enter a URL for the movie cover image
       
+      //- Genre checkboxes (pre-checked based on current genres)
       .form-group
         label Genres:
         .genres-checkbox
           each genre in availableGenres
             .checkbox-item
+              //- Determine if checkbox should be checked
               - let isChecked = false;
               - if (formData && formData.genres) {
               -   isChecked = formData.genres.includes(genre);
@@ -80,6 +91,7 @@ block content
               label(for=`genre-${genre}`)= genre
         small.form-text Select at least one genre
       
+      //- Rating input (pre-filled, 1-10 scale)
       .form-group
         label(for="rating") Rating (1-10):
         input.form-control(
@@ -94,6 +106,7 @@ block content
         )
         small.form-text Rate from 1 (poor) to 10 (excellent)
       
+      //- Form action buttons
       .form-actions
         button.btn.btn-primary(type="submit") 
           span ✏️ 

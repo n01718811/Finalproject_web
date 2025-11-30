@@ -1,11 +1,13 @@
 //- Filter movies view
+//- Allows users to filter their movie collection by various criteria
 //- Author: Tien Dung Pham (n01718811)
 
 extends layout
 
 block content
+  //- Page header with title and action buttons
   .movies-header
-    h1 Filter Movies
+    h1 🔍 Filter Movies
     .filter-actions
       a.btn.btn-secondary(href="/movies") 
         span 📽️ 
@@ -14,9 +16,11 @@ block content
         span ➕ 
         | Add New Movie
 
+  //- Filter form container
   .filter-container
     form.filter-form(method='POST', action='/movies/filter')
       .filter-grid
+        //- Movie name search field
         .form-group
           label(for='name') Movie Name:
           input.form-control(
@@ -27,6 +31,7 @@ block content
             placeholder='Search by movie name'
           )
         
+        //- Genre dropdown filter
         .form-group
           label(for='genre') Genre:
           select.form-control(id='genre', name='genre')
@@ -37,29 +42,30 @@ block content
                 selected=filtered && filters.genre === genre
               )= genre
         
+        //- Year range filter (min and max)
         .form-group
           label(for='minYear') Year Range:
           .year-range
             input.form-control(
-              type='number', 
+              type='text', 
               id='minYear', 
-              name='minYear', 
-              min='1900',
-              max=new Date().getFullYear(),
+              name='minYear',
+              pattern='[0-9]{4}',
               value=filtered ? filters.minYear : '',
-              placeholder='From'
+              placeholder='From (e.g. 1980)'
             )
             span.to to
             input.form-control(
-              type='number', 
+              type='text', 
               id='maxYear', 
-              name='maxYear', 
-              min='1900',
-              max=new Date().getFullYear(),
+              name='maxYear',
+              pattern='[0-9]{4}',
               value=filtered ? filters.maxYear : '',
-              placeholder='To'
+              placeholder='To (e.g. 2024)'
             )
+          small.form-text Enter 4-digit years between 1900 and 2025
         
+        //- Rating range filter (min and max)
         .form-group
           label(for='minRating') Rating Range:
           .rating-range
@@ -85,6 +91,7 @@ block content
               placeholder='Max'
             )
       
+      //- Filter action buttons
       .filter-actions
         button.btn.btn-primary(type='submit') 
           span 🔍 
@@ -94,25 +101,33 @@ block content
             span 🗑️ 
             | Clear Filters
 
+  //- Results heading showing number of movies found
   if filtered
     h2.results-heading Filtered Results (#{movies.length} movies)
   else
     h2.results-heading All Movies (#{movies.length} movies)
 
+  //- Display movie cards or empty state
   if movies && movies.length > 0
     .movies-grid
       each movie in movies
         .movie-card
+          //- Movie cover image
           .movie-cover
             img.movie-image(
               src=movie.coverImage, 
               alt=movie.name,
               onerror="this.src='/images/default-movie.jpg'"
             )
+          
+          //- Movie content section
           .movie-content
+            //- Movie title and year
             .movie-header
               h3.movie-title= movie.name
               .movie-year (#{movie.year})
+            
+            //- Star rating display
             .movie-rating
               - let stars = '';
               - for (let i = 1; i <= 10; i++) {
@@ -123,10 +138,16 @@ block content
                 - }
               - }
               span.rating-value (#{movie.rating}/10)
+            
+            //- Movie description
             .movie-description= movie.description
+            
+            //- Genre badges
             .movie-genres
               each genre in movie.genres
                 span.genre-badge= genre
+            
+            //- Action buttons (View, Edit, Delete)
             .movie-actions
               a.btn.btn-sm.btn-outline(href=`/movies/${movie._id}`)
                 span 👁️
@@ -143,9 +164,11 @@ block content
                   span 🗑️ 
                   | Delete
 
+            //- Movie footer with creation date
             .movie-footer
               small Added on #{movie.createdAt.toLocaleDateString()}
   else
+    //- Empty state when no movies match filters
     .empty-state
       if filtered
         h2 No movies found

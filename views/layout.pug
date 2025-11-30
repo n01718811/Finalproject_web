@@ -1,20 +1,26 @@
 //- Main layout template
+//- Base template that all other views extend
+//- Includes navigation, flash messages, and footer
 //- Author: Kaushalya Satharasinghe (n01718508)
 
 doctype html
 html(lang="en")
   head
+    //- Meta tags for character encoding and responsive design
     meta(charset="UTF-8")
     meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    //- Dynamic page title
     title= title + ' | Movie Management App'
+    //- Main stylesheet
     link(rel="stylesheet", href="/stylesheets/style.css")
   body
-    //- Navigation partial
+    //- Navigation bar (imported from partial)
     include partials/navbar
 
+    //- Main content area
     main.main-content
       .container
-        //- Flash messages
+        //- Flash messages for user feedback
         if success_msg && success_msg.length > 0
           .alert.alert-success= success_msg
         if error_msg && error_msg.length > 0
@@ -22,10 +28,10 @@ html(lang="en")
         if error && error.length > 0
           .alert.alert-danger= error
 
-        //- Main content block
+        //- Content block (overridden by extending views)
         block content
 
-    //- Footer
+    //- Footer with copyright information
     footer.footer
       .container
         p &copy; 2025 Movie Management App. Created by Tien Dung Pham (n01718811) & Kaushalya Satharasinghe (n01718508).

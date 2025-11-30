@@ -1,29 +1,40 @@
 //- Movies list view
+//- Displays all movies in the user's collection in a grid layout
+//- Includes View, Edit, and Delete actions for each movie
 //- Author: Tien Dung Pham (n01718811)
 
 extends layout
 
 block content
+  //- Page header with title and add movie button
   .movies-header
-    h1 My Movie Collection
+    h1 🎬 My Movie Collection
     a.btn.btn-primary(href="/movies/add") 
       span ➕ 
       | Add New Movie
 
+  //- Display movies if collection is not empty
   if movies && movies.length > 0
     .movies-grid
+      //- Loop through each movie and display as a card
       each movie in movies
         .movie-card
+          //- Movie cover image section
           .movie-cover
             img.movie-image(
               src=movie.coverImage, 
               alt=movie.name,
               onerror="this.src='/images/default-movie.jpg'"
             )
+          
+          //- Movie content section
           .movie-content
+            //- Movie title and release year
             .movie-header
               h3.movie-title= movie.name
               .movie-year (#{movie.year})
+            
+            //- Star rating display (1-10 scale)
             .movie-rating
               - let stars = '';
               - for (let i = 1; i <= 10; i++) {
@@ -34,17 +45,26 @@ block content
                 - }
               - }
               span.rating-value (#{movie.rating}/10)
+            
+            //- Movie description text
             .movie-description= movie.description
+            
+            //- Genre badges
             .movie-genres
               each genre in movie.genres
                 span.genre-badge= genre
+            
+            //- Action buttons (View, Edit, Delete)
             .movie-actions
+              //- View details button
               a.btn.btn-sm.btn-outline(href=`/movies/${movie._id}`)
                 span 👁️
                 | View
+              //- Edit button
               a.btn.btn-sm.btn-outline(href=`/movies/edit/${movie._id}`) 
                 span ✏️ 
                 | Edit
+              //- Delete form with JavaScript confirmation
               form.delete-form(
                 action=`/movies/delete/${movie._id}`,
                 method="POST",
@@ -54,9 +74,11 @@ block content
                   span 🗑️ 
                   | Delete
 
+            //- Movie footer with creation date
             .movie-footer
               small Added on #{movie.createdAt.toLocaleDateString()}
   else
+    //- Empty state when no movies exist
     .empty-state
       h2 No movies yet
       p You haven't added any movies to your collection.
